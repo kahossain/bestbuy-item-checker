@@ -1,0 +1,16 @@
+version: '3.1'
+
+services:
+  console_app:
+    container_name: nvidia-rtx-tracker
+    image: bestbuy-item-tracker:latest
+    build:
+        context: .
+        dockerfile: Dockerfile
+    ports:
+      - '81:8080'    
+    healthcheck:
+      test: curl --silent --fail --request GET http://localhost:8080/actuator/health | jq --exit-status '.status == "UP"' || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
